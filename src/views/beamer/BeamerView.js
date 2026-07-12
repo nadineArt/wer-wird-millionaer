@@ -28,21 +28,41 @@ export function mountBeamerView(container) {
         <div class="beamer-waiting anim-fade-in">
           <div class="beamer-waiting__title">Wer kennt ihn<br/>am besten?</div>
           <div class="beamer-waiting__sub">${session.gameTitle}</div>
-          ${activePlayers.length > 0 ? `
-            <div style="display:flex;gap:1.5vw;flex-wrap:wrap;justify-content:center;margin-top:2vh;">
-              ${activePlayers.map(p => `
-                <div class="beamer-player-chip anim-avatar-in">
-                  <img src="${getAvatarSrc(p.avatar)}" alt="${p.name}" />
-                  <span>${p.name}</span>
-                </div>
-              `).join('')}
+
+          <div style="display:flex;align-items:center;gap:4vw;margin-top:3vh;flex-wrap:wrap;justify-content:center;">
+            <div style="display:flex;flex-direction:column;align-items:center;gap:1vh;">
+              <canvas id="beamer-qr" style="border-radius:1rem;"></canvas>
+              <div style="font-size:clamp(0.7rem,1.2vw,1rem);color:var(--color-text-muted);">
+                Smartphone scannen &amp; mitspielen
+              </div>
+              <div style="font-size:clamp(0.6rem,1vw,0.85rem);color:var(--color-accent);word-break:break-all;max-width:30vw;text-align:center;">
+                ${session.joinUrl || ''}
+              </div>
             </div>
-          ` : ''}
-          <div style="font-size:clamp(0.8rem,1.5vw,1.2rem);color:var(--color-text-muted);margin-top:3vh;">
-            Einloggen unter: <span style="color:var(--color-accent);">${session.joinUrl || ''}</span>
+
+            ${activePlayers.length > 0 ? `
+              <div style="display:flex;flex-direction:column;gap:1.5vh;align-items:flex-start;">
+                <div style="font-size:clamp(0.8rem,1.4vw,1.1rem);color:var(--color-text-muted);font-weight:700;text-transform:uppercase;letter-spacing:0.08em;">
+                  ${activePlayers.length} dabei
+                </div>
+                <div style="display:flex;gap:1.5vw;flex-wrap:wrap;max-width:50vw;">
+                  ${activePlayers.map(p => `
+                    <div class="beamer-player-chip anim-avatar-in">
+                      <img src="${getAvatarSrc(p.avatar)}" alt="${p.name}" />
+                      <span>${p.name}</span>
+                    </div>
+                  `).join('')}
+                </div>
+              </div>
+            ` : `
+              <div style="font-size:clamp(1rem,2vw,1.5rem);color:var(--color-text-muted);">
+                Noch niemand da… 👀
+              </div>
+            `}
           </div>
         </div>
       `;
+      renderBeamerQR(session.joinUrl);
       return;
     }
 
@@ -134,6 +154,24 @@ export function mountBeamerView(container) {
         </div>
       </div>
     `;
+  }
+
+  async function renderBeamerQR(url) {
+    if (!url) return;
+    try {
+      const QRCode = (await import('qrcode')).default;
+      const canvas = container.querySelector('#beamer-qr');
+      if (canvas) {
+        const size = Math.min(Math.round(window.innerWidth * 0.22), 320);
+        await QRCode.toCanvas(canvas, url, {
+          width: size,
+          margin: 2,
+          color: { dark: '#000000', light: '#ffffff' },
+        });
+      }
+    } catch (err) {
+      console.error('QR render error:', err);
+    }
   }
 
   async function findAndWatchSession() {
