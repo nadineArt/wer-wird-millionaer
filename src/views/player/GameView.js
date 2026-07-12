@@ -57,7 +57,7 @@ export function mountGameView(container) {
         <div class="game-screen__footer">
           ${!state.submittedAnswer && !state.revealed
             ? `<button class="submit-btn" id="submit-btn" ${!state.selectedAnswer ? 'disabled' : ''}>
-                Das ist mein Vibe! 🔥
+                Einloggen ✓
               </button>`
             : state.submittedAnswer && !state.revealed
             ? `<div style="text-align:center;font-size:0.85rem;color:var(--color-text-muted);font-weight:600;padding:0.75rem;">
@@ -78,6 +78,7 @@ export function mountGameView(container) {
   function renderAnswers(question) {
     const answersEl = container.querySelector('#answers');
     if (!answersEl) return;
+    answersEl.innerHTML = '';
 
     ANSWERS.forEach(letter => {
       if (state.hiddenOptions.includes(letter)) {
@@ -218,7 +219,7 @@ export function mountGameView(container) {
       } catch (err) {
         showToast(err.message, 'error');
         submitBtn.disabled = false;
-        submitBtn.textContent = 'Das ist mein Vibe! 🔥';
+        submitBtn.textContent = 'Einloggen ✓';
       }
     });
   }
