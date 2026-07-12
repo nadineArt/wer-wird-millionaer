@@ -34,14 +34,15 @@ function renderShell() {
   adminApp.innerHTML = `
     <div class="admin-shell">
       <div class="admin-topbar">
+        <button class="admin-menu-btn" id="menu-btn" aria-label="Menü">☰</button>
         <div class="admin-topbar__logo">🎛️ WWM Admin</div>
         <div class="admin-topbar__actions">
-          <a href="index.html" target="_blank" class="btn btn--secondary" style="font-size:0.8rem;">Spieler-View 🔗</a>
+          <a href="index.html" target="_blank" class="btn btn--secondary" style="font-size:0.8rem;">Spieler 🔗</a>
           <a href="beamer.html" target="_blank" class="btn btn--secondary" style="font-size:0.8rem;">Beamer 📺</a>
           <button class="btn btn--danger" id="logout-btn" style="font-size:0.8rem;">Ausloggen</button>
         </div>
       </div>
-      <nav class="admin-sidebar">
+      <nav class="admin-sidebar" id="admin-sidebar">
         <div class="admin-nav__section">Spielbetrieb</div>
         <div class="admin-nav__item" data-route="control"><span class="admin-nav__icon">🎮</span>Spielsteuerung</div>
         <div class="admin-nav__section">Konfiguration</div>
@@ -57,6 +58,17 @@ function renderShell() {
   `;
 
   const contentEl = adminApp.querySelector('#admin-content');
+  const sidebar = adminApp.querySelector('#admin-sidebar');
+  const menuBtn = adminApp.querySelector('#menu-btn');
+
+  menuBtn.addEventListener('click', () => {
+    sidebar.classList.toggle('admin-sidebar--open');
+  });
+
+  // Close sidebar when navigating on mobile
+  function closeSidebar() {
+    sidebar.classList.remove('admin-sidebar--open');
+  }
 
   const routes = {
     dashboard: mountAdminDashboardView,
@@ -80,7 +92,10 @@ function renderShell() {
   }
 
   adminApp.querySelectorAll('.admin-nav__item').forEach(el => {
-    el.addEventListener('click', () => { window.location.hash = el.dataset.route; });
+    el.addEventListener('click', () => {
+      window.location.hash = el.dataset.route;
+      closeSidebar();
+    });
   });
 
   adminApp.querySelector('#logout-btn').addEventListener('click', () => {

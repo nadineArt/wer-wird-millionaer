@@ -13,9 +13,10 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 0 var(--space-6);
+  padding: 0 var(--space-4);
   background: var(--color-bg-card);
   border-bottom: 1px solid var(--color-border);
+  gap: var(--space-3);
 }
 
 .admin-topbar__logo {
@@ -23,12 +24,30 @@
   font-weight: 900;
   color: var(--color-accent);
   letter-spacing: -0.01em;
+  flex-shrink: 0;
 }
 
 .admin-topbar__actions {
   display: flex;
   align-items: center;
-  gap: var(--space-3);
+  gap: var(--space-2);
+  flex-wrap: wrap;
+}
+
+/* Hamburger button — hidden on desktop */
+.admin-menu-btn {
+  display: none;
+  align-items: center;
+  justify-content: center;
+  width: 2.4rem;
+  height: 2.4rem;
+  background: var(--glass-bg);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  color: var(--color-text);
+  font-size: 1.3rem;
+  cursor: pointer;
+  flex-shrink: 0;
 }
 
 .admin-sidebar {
@@ -78,9 +97,92 @@
 }
 
 .admin-content {
-  padding: var(--space-6);
+  padding: var(--space-5);
   overflow-y: auto;
   background: var(--color-bg);
+}
+
+/* ===== Mobile Layout ===== */
+
+@media (max-width: 700px) {
+  .admin-shell {
+    grid-template-columns: 1fr;
+    grid-template-rows: 52px 1fr;
+  }
+
+  /* Sidebar becomes a slide-in drawer */
+  .admin-sidebar {
+    position: fixed;
+    inset: 52px 0 0 0;
+    z-index: 200;
+    transform: translateX(-100%);
+    transition: transform 0.25s ease;
+    border-right: none;
+    border-top: 1px solid var(--color-border);
+    padding-bottom: 2rem;
+  }
+
+  .admin-sidebar.admin-sidebar--open {
+    transform: translateX(0);
+  }
+
+  /* Overlay behind open drawer */
+  .admin-sidebar--open::before {
+    content: '';
+    position: fixed;
+    inset: 52px 0 0 0;
+    background: rgba(0,0,0,0.5);
+    z-index: -1;
+  }
+
+  .admin-menu-btn {
+    display: flex;
+  }
+
+  /* Hide text labels in topbar actions on very small screens */
+  .admin-topbar__actions .btn--secondary span,
+  .admin-topbar__actions a.btn--secondary {
+    font-size: 0.72rem;
+    padding: var(--space-1) var(--space-2);
+  }
+
+  .admin-content {
+    padding: var(--space-4) var(--space-3);
+  }
+
+  .admin-page-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--space-3);
+  }
+
+  .admin-page-header > div:last-child {
+    width: 100%;
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-2);
+  }
+
+  .game-control {
+    grid-template-columns: 1fr;
+  }
+
+  .game-control__sidebar {
+    order: -1;
+  }
+
+  .control-answers {
+    grid-template-columns: 1fr;
+  }
+
+  .admin-table th:nth-child(3),
+  .admin-table td:nth-child(3) {
+    display: none;
+  }
+
+  .qr-box {
+    display: none;
+  }
 }
 
 /* ===== Admin Login ===== */
