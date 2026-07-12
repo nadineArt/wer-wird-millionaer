@@ -1,5 +1,5 @@
 import { db } from '../firebase/config.js';
-import { doc, updateDoc, serverTimestamp } from 'firebase/firestore';
+import { doc, updateDoc, getDocs, collection, setDoc, serverTimestamp, increment } from 'firebase/firestore';
 import { COLLECTIONS, JOKER_TYPES, ANSWERS } from '../utils/constants.js';
 
 const playerRef = (sessionId, playerId) =>
@@ -38,11 +38,29 @@ export async function usePhoneJoker(sessionId, playerId) {
   });
 }
 
-export async function useAudienceJoker(sessionId, playerId) {
+export async function useAudienceJoker(sessionId, playerId, questionId) {
   await updateDoc(playerRef(sessionId, playerId), {
     'jokersUsed.audience': true,
     lastSeenAt: serverTimestamp(),
   });
+
+  if (!questionId) return;
+
+  // Backfill votes from players who already submitted before the joker was activated
+  const playersSnap = await getDocs(
+    collection(db, COLLECTIONS.SESSIONS, sessionId, 'players')
+  );
+  const votes = { A: 0, B: 0, C: 0, D: 0 };
+  const voters = {};
+  for (const p of playersSnap.docs) {
+    const submitted = p.data().answers?.[questionId]?.submitted;
+    if (submitted && ANSWERS.includes(submitted)) {
+      votes[submitted] = (votes[submitted] || 0) + 1;
+      voters[p.id] = submitted;
+    }
+  }
+  const voteRef = doc(db, COLLECTIONS.SESSIONS, sessionId, 'audienceVotes', questionId);
+  await setDoc(voteRef, { votes, voters, updatedAt: serverTimestamp() }, { merge: true });
 }
 
 export const JOKER_META = {

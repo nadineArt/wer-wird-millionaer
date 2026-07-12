@@ -192,13 +192,13 @@ export function mountGameView(container) {
       await usePhoneJoker(sessionId, playerId);
       showToast('📞 Joker eingelöst — ruf jemanden an!', 'default', 5000);
     } else if (type === JOKER_TYPES.AUDIENCE) {
-      await useAudienceJoker(sessionId, playerId);
-      state.showAudience = true;
       const qId = state.session.currentQuestionId;
+      await useAudienceJoker(sessionId, playerId, qId);
+      state.showAudience = true;
       if (state.audienceUnsub) state.audienceUnsub();
       state.audienceUnsub = watchAudienceVotes(sessionId, qId, (data) => {
         state.audienceVotes = data;
-        renderAudienceChart();
+        render();
       });
       render();
     }
