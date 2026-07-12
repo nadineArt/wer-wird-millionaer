@@ -1,0 +1,213 @@
+/* ===== Beamer Layout ===== */
+
+body.beamer-mode {
+  overflow: hidden;
+  background: var(--color-bg);
+}
+
+.beamer-screen {
+  display: grid;
+  grid-template-rows: auto 1fr auto;
+  height: 100vh;
+  width: 100vw;
+  padding: 3vh 4vw;
+  gap: 2vh;
+}
+
+.beamer-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.beamer-logo {
+  font-size: clamp(1.2rem, 2.5vw, 2rem);
+  font-weight: 900;
+  color: var(--color-accent);
+  letter-spacing: -0.01em;
+}
+
+.beamer-stage {
+  font-size: clamp(0.8rem, 1.5vw, 1.2rem);
+  font-weight: 700;
+  color: var(--color-text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+}
+
+.beamer-main {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 3vh;
+}
+
+.beamer-question {
+  font-size: clamp(1.5rem, 3.5vw, 3rem);
+  font-weight: 800;
+  line-height: 1.25;
+  text-align: center;
+  color: var(--color-text);
+  padding: 0 4vw;
+}
+
+.beamer-answers {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.5vh 2vw;
+}
+
+.beamer-answer {
+  display: flex;
+  align-items: center;
+  gap: 1.5vw;
+  padding: 2vh 2.5vw;
+  background: var(--glass-bg);
+  border: 2px solid var(--glass-border);
+  border-radius: var(--radius-xl);
+  backdrop-filter: var(--glass-blur);
+  transition: all var(--dur-normal) ease;
+}
+
+.beamer-answer__letter {
+  flex-shrink: 0;
+  width: clamp(2.5rem, 4vw, 4rem);
+  height: clamp(2.5rem, 4vw, 4rem);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, var(--color-accent), var(--color-accent-dim));
+  border-radius: var(--radius-md);
+  font-size: clamp(0.9rem, 1.8vw, 1.6rem);
+  font-weight: 900;
+  color: var(--color-bg);
+}
+
+.beamer-answer__text {
+  font-size: clamp(1rem, 2vw, 1.8rem);
+  font-weight: 700;
+  line-height: 1.2;
+}
+
+.beamer-answer--correct {
+  border-color: var(--color-correct);
+  background: rgba(61,214,140,0.12);
+  box-shadow: var(--glow-correct);
+}
+
+.beamer-answer--wrong {
+  opacity: 0.25;
+}
+
+.beamer-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 2vw;
+}
+
+.beamer-players {
+  display: flex;
+  gap: 1.5vw;
+  flex-wrap: wrap;
+}
+
+.beamer-player-chip {
+  display: flex;
+  align-items: center;
+  gap: 0.8vw;
+  padding: 0.8vh 1.5vw;
+  background: var(--glass-bg);
+  border: 1.5px solid var(--glass-border);
+  border-radius: var(--radius-full);
+  font-size: clamp(0.7rem, 1.2vw, 1rem);
+  font-weight: 700;
+  transition: all var(--dur-normal) ease;
+}
+
+.beamer-player-chip img {
+  width: clamp(1.5rem, 2.5vw, 2.5rem);
+  height: clamp(1.5rem, 2.5vw, 2.5rem);
+  border-radius: var(--radius-full);
+  object-fit: cover;
+  border: 1.5px solid var(--color-accent);
+}
+
+.beamer-player-chip--answered {
+  border-color: var(--color-correct);
+  background: rgba(61,214,140,0.08);
+}
+
+.beamer-player-chip--eliminated {
+  opacity: 0.3;
+  filter: grayscale(1);
+}
+
+.beamer-joker-toast {
+  position: fixed;
+  top: 5vh;
+  right: 4vw;
+  background: var(--color-bg-elevated);
+  border: 2px solid var(--color-accent);
+  border-radius: var(--radius-xl);
+  padding: 2vh 3vw;
+  font-size: clamp(1rem, 1.8vw, 1.6rem);
+  font-weight: 800;
+  color: var(--color-accent);
+  box-shadow: var(--glow-accent);
+  animation: fadeSlideUp 400ms var(--ease-bounce) both, fadeIn 400ms 3s reverse forwards;
+  display: flex;
+  align-items: center;
+  gap: 1.5vw;
+}
+
+.beamer-waiting {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  gap: 3vh;
+  text-align: center;
+}
+
+.beamer-waiting__title {
+  font-size: clamp(2rem, 5vw, 5rem);
+  font-weight: 900;
+  background: linear-gradient(135deg, var(--color-accent), #fff 60%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.beamer-waiting__sub {
+  font-size: clamp(0.9rem, 2vw, 1.8rem);
+  color: var(--color-text-muted);
+}
+
+.beamer-ladder {
+  display: flex;
+  flex-direction: column-reverse;
+  gap: 3px;
+}
+
+.beamer-ladder-step {
+  display: flex;
+  align-items: center;
+  gap: 0.8vw;
+  padding: 0.4vh 1.2vw;
+  border-radius: var(--radius-sm);
+  font-size: clamp(0.6rem, 1vw, 0.9rem);
+  font-weight: 600;
+  color: var(--color-text-muted);
+}
+
+.beamer-ladder-step--active {
+  background: rgba(245,166,35,0.15);
+  color: var(--color-accent);
+  font-weight: 800;
+}
+
+.beamer-ladder-step--safe {
+  color: var(--color-correct);
+}

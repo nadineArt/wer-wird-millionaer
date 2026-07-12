@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <meta name="theme-color" content="#08081a" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <title>Wer kennt ihn am besten?</title>
+  <link rel="manifest" href="manifest.json" />
+  <link rel="icon" href="assets/favicon.ico" />
+  <style>
+    html, body { margin: 0; padding: 0; background: #08081a; color: #f0f0ff; font-family: 'Montserrat', sans-serif; height: 100%; }
+    #app { height: 100%; }
+    .boot-screen { display: flex; align-items: center; justify-content: center; height: 100%; }
+  </style>
+</head>
+<body>
+  <div id="app">
+    <div class="boot-screen">
+      <div style="width:2.5rem;height:2.5rem;border:3px solid rgba(255,255,255,0.1);border-top-color:#f5a623;border-radius:50%;animation:spin 700ms linear infinite;"></div>
+    </div>
+  </div>
+  <div id="toast-container"></div>
+  <canvas id="confetti-canvas" style="display:none;position:fixed;inset:0;pointer-events:none;z-index:8888;"></canvas>
+  <style>@keyframes spin{to{transform:rotate(360deg)}}</style>
+  <script type="module" src="js/player.js"></script>
+</body>
+</html>

@@ -1,0 +1,46 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // App-Konfiguration: öffentlich lesbar, nur via Firebase Console schreibbar
+    match /config/{doc} {
+      allow read: if true;
+      allow write: if false;
+    }
+
+    // Spiele + Fragen: öffentlich lesbar, schreiben nur über vertrauenswürdigen Client
+    // (kein Firebase Auth → wir verlassen uns auf strukturelle Validierung)
+    match /games/{gameId} {
+      allow read: if true;
+      allow write: if false;
+
+      match /questions/{questionId} {
+        allow read: if true;
+        allow write: if false;
+      }
+    }
+
+    // Sessions: lesbar für alle; Admin-Writes via Firestore-Regeln nicht
+    // absicherbar ohne Firebase Auth — wir setzen auf strukturelle Integrität im Client
+    match /sessions/{sessionId} {
+      allow read: if true;
+      allow create: if true;
+      allow update: if true;
+
+      match /players/{playerId} {
+        allow read: if true;
+        allow create: if
+          request.resource.data.keys().hasAll(['name', 'avatar', 'status', 'jokersUsed', 'answers', 'joinedAt']) &&
+          request.resource.data.name is string &&
+          request.resource.data.name.size() >= 1 &&
+          request.resource.data.name.size() <= 30;
+        allow update: if true;
+      }
+
+      match /audienceVotes/{questionId} {
+        allow read: if true;
+        allow write: if true;
+      }
+    }
+  }
+}
