@@ -42,33 +42,44 @@ function renderShell() {
           <button class="btn btn--danger" id="logout-btn" style="font-size:0.8rem;">Ausloggen</button>
         </div>
       </div>
-      <nav class="admin-sidebar" id="admin-sidebar">
-        <div class="admin-nav__section">Spielbetrieb</div>
-        <div class="admin-nav__item" data-route="control"><span class="admin-nav__icon">🎮</span>Spielsteuerung</div>
-        <div class="admin-nav__section">Konfiguration</div>
-        <div class="admin-nav__item" data-route="games"><span class="admin-nav__icon">🗂️</span>Spiele</div>
-        <div class="admin-nav__item" data-route="questions"><span class="admin-nav__icon">❓</span>Fragen</div>
-        <div class="admin-nav__item" data-route="stages"><span class="admin-nav__icon">🏆</span>Stufen</div>
-        <div class="admin-nav__section">System</div>
-        <div class="admin-nav__item" data-route="settings"><span class="admin-nav__icon">⚙️</span>Einstellungen</div>
-        <div class="admin-nav__item" data-route="dashboard"><span class="admin-nav__icon">🏠</span>Dashboard</div>
-      </nav>
-      <main class="admin-content" id="admin-content"></main>
+      <div class="admin-body">
+        <nav class="admin-sidebar" id="admin-sidebar">
+          <div class="admin-nav__section">Spielbetrieb</div>
+          <div class="admin-nav__item" data-route="control"><span class="admin-nav__icon">🎮</span>Spielsteuerung</div>
+          <div class="admin-nav__section">Konfiguration</div>
+          <div class="admin-nav__item" data-route="games"><span class="admin-nav__icon">🗂️</span>Spiele</div>
+          <div class="admin-nav__item" data-route="questions"><span class="admin-nav__icon">❓</span>Fragen</div>
+          <div class="admin-nav__item" data-route="stages"><span class="admin-nav__icon">🏆</span>Stufen</div>
+          <div class="admin-nav__section">System</div>
+          <div class="admin-nav__item" data-route="settings"><span class="admin-nav__icon">⚙️</span>Einstellungen</div>
+          <div class="admin-nav__item" data-route="dashboard"><span class="admin-nav__icon">🏠</span>Dashboard</div>
+        </nav>
+        <main class="admin-content" id="admin-content"></main>
+      </div>
+      <div class="admin-sidebar-backdrop" id="sidebar-backdrop"></div>
     </div>
   `;
 
   const contentEl = adminApp.querySelector('#admin-content');
   const sidebar = adminApp.querySelector('#admin-sidebar');
   const menuBtn = adminApp.querySelector('#menu-btn');
+  const backdrop = adminApp.querySelector('#sidebar-backdrop');
 
-  menuBtn.addEventListener('click', () => {
-    sidebar.classList.toggle('admin-sidebar--open');
-  });
+  function openSidebar() {
+    sidebar.classList.add('admin-sidebar--open');
+    backdrop.classList.add('active');
+  }
 
-  // Close sidebar when navigating on mobile
   function closeSidebar() {
     sidebar.classList.remove('admin-sidebar--open');
+    backdrop.classList.remove('active');
   }
+
+  menuBtn.addEventListener('click', () => {
+    sidebar.classList.contains('admin-sidebar--open') ? closeSidebar() : openSidebar();
+  });
+
+  backdrop.addEventListener('click', closeSidebar);
 
   const routes = {
     dashboard: mountAdminDashboardView,

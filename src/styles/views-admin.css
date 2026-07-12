@@ -1,22 +1,25 @@
 /* ===== Admin Layout ===== */
 
 .admin-shell {
-  display: grid;
-  grid-template-columns: 240px 1fr;
-  grid-template-rows: 56px 1fr;
-  height: 100%;
-  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  height: 100dvh;
 }
 
 .admin-topbar {
-  grid-column: 1 / -1;
+  flex-shrink: 0;
   display: flex;
   align-items: center;
   justify-content: space-between;
   padding: 0 var(--space-4);
+  height: 56px;
   background: var(--color-bg-card);
   border-bottom: 1px solid var(--color-border);
   gap: var(--space-3);
+  position: sticky;
+  top: 0;
+  z-index: 100;
 }
 
 .admin-topbar__logo {
@@ -31,10 +34,9 @@
   display: flex;
   align-items: center;
   gap: var(--space-2);
-  flex-wrap: wrap;
 }
 
-/* Hamburger button — hidden on desktop */
+/* Hamburger — hidden on desktop */
 .admin-menu-btn {
   display: none;
   align-items: center;
@@ -50,7 +52,16 @@
   flex-shrink: 0;
 }
 
+/* Below topbar: sidebar + content side by side */
+.admin-body {
+  display: flex;
+  flex: 1;
+  min-height: 0;
+}
+
 .admin-sidebar {
+  width: 240px;
+  flex-shrink: 0;
   background: var(--color-bg-card);
   border-right: 1px solid var(--color-border);
   padding: var(--space-4) 0;
@@ -97,63 +108,66 @@
 }
 
 .admin-content {
+  flex: 1;
   padding: var(--space-5);
   overflow-y: auto;
   background: var(--color-bg);
+  min-width: 0;
 }
 
 /* ===== Mobile Layout ===== */
 
 @media (max-width: 700px) {
-  .admin-shell {
-    grid-template-columns: 1fr;
-    grid-template-rows: 52px 1fr;
-  }
-
-  /* Sidebar becomes a slide-in drawer */
-  .admin-sidebar {
-    position: fixed;
-    inset: 52px 0 0 0;
-    z-index: 200;
-    transform: translateX(-100%);
-    transition: transform 0.25s ease;
-    border-right: none;
-    border-top: 1px solid var(--color-border);
-    padding-bottom: 2rem;
-  }
-
-  .admin-sidebar.admin-sidebar--open {
-    transform: translateX(0);
-  }
-
-  /* Overlay behind open drawer */
-  .admin-sidebar--open::before {
-    content: '';
-    position: fixed;
-    inset: 52px 0 0 0;
-    background: rgba(0,0,0,0.5);
-    z-index: -1;
+  .admin-topbar {
+    height: 52px;
   }
 
   .admin-menu-btn {
     display: flex;
   }
 
-  /* Hide text labels in topbar actions on very small screens */
-  .admin-topbar__actions .btn--secondary span,
-  .admin-topbar__actions a.btn--secondary {
-    font-size: 0.72rem;
-    padding: var(--space-1) var(--space-2);
+  /* Sidebar: hidden off-screen, slides in as overlay */
+  .admin-sidebar {
+    position: fixed;
+    top: 52px;
+    left: 0;
+    bottom: 0;
+    width: 75vw;
+    max-width: 280px;
+    z-index: 300;
+    transform: translateX(-100%);
+    transition: transform 0.25s ease;
+    border-right: 1px solid var(--color-border);
+    box-shadow: 4px 0 24px rgba(0,0,0,0.4);
+  }
+
+  .admin-sidebar.admin-sidebar--open {
+    transform: translateX(0);
+  }
+
+  /* Dim overlay when sidebar is open */
+  .admin-sidebar-backdrop {
+    display: none;
+    position: fixed;
+    inset: 0;
+    z-index: 299;
+    background: rgba(0,0,0,0.55);
+  }
+
+  .admin-sidebar-backdrop.active {
+    display: block;
   }
 
   .admin-content {
-    padding: var(--space-4) var(--space-3);
+    padding: var(--space-3);
+    width: 100%;
   }
 
   .admin-page-header {
     flex-direction: column;
     align-items: flex-start;
     gap: var(--space-3);
+    margin-bottom: var(--space-4);
   }
 
   .admin-page-header > div:last-child {
@@ -161,6 +175,10 @@
     display: flex;
     flex-wrap: wrap;
     gap: var(--space-2);
+  }
+
+  .admin-page-title {
+    font-size: var(--text-lg);
   }
 
   .game-control {
@@ -175,6 +193,21 @@
     grid-template-columns: 1fr;
   }
 
+  .control-actions {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .control-actions .btn {
+    justify-content: center;
+  }
+
+  /* Tables: hide less important columns, allow horizontal scroll */
+  .admin-table-wrap {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
   .admin-table th:nth-child(3),
   .admin-table td:nth-child(3) {
     display: none;
@@ -182,6 +215,11 @@
 
   .qr-box {
     display: none;
+  }
+
+  .admin-topbar__actions a.btn--secondary {
+    font-size: 0.72rem;
+    padding: 0.25rem 0.5rem;
   }
 }
 
