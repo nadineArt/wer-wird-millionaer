@@ -2,7 +2,6 @@ import { db } from '../firebase/config.js';
 import {
   collection, doc, addDoc, updateDoc, getDoc, getDocs,
   query, where, onSnapshot, serverTimestamp, writeBatch,
-  orderBy, limit,
 } from 'firebase/firestore';
 import { COLLECTIONS, SESSION_STATUS, QUESTION_STATE, PLAYER_STATUS } from '../utils/constants.js';
 import { getQuestions, getGame } from './gameService.js';
@@ -16,13 +15,12 @@ export async function getOpenSession() {
   const q = query(
     sessionsRef(),
     where('status', 'in', [SESSION_STATUS.WAITING, SESSION_STATUS.ACTIVE]),
-    orderBy('createdAt', 'desc'),
-    limit(1),
   );
   const snap = await getDocs(q);
   if (snap.empty) return null;
-  const d = snap.docs[0];
-  return { id: d.id, ...d.data() };
+  const docs = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+  docs.sort((a, b) => (b.createdAt?.toMillis?.() ?? 0) - (a.createdAt?.toMillis?.() ?? 0));
+  return docs[0];
 }
 
 export async function createSession(gameId, masterId, joinBaseUrl) {
