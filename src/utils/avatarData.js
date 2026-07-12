@@ -1,5 +1,5 @@
 export const AVATARS = [
-  { id: 'beyonce',       name: 'Beyoncé',         file: 'beyonce.png' },
+  { id: 'beyonce',       name: 'Beyoncé',          file: 'beyonce.png' },
   { id: 'ladygaga',      name: 'Lady Gaga',        file: 'ladygaga.png' },
   { id: 'madonna',       name: 'Madonna',          file: 'madonna.png' },
   { id: 'britney',       name: 'Britney',          file: 'britney.png' },
@@ -8,9 +8,13 @@ export const AVATARS = [
   { id: 'rihanna',       name: 'Rihanna',          file: 'rihanna.png' },
   { id: 'kylie',         name: 'Kylie',            file: 'kylie.png' },
   { id: 'mariah',        name: 'Mariah',           file: 'mariah.png' },
-  { id: 'whitney',       name: 'Whitney',          file: 'whitney.png' },
   { id: 'ariana',        name: 'Ariana',           file: 'ariana.png' },
   { id: 'taylor',        name: 'Taylor',           file: 'taylor.png' },
+  { id: 'dualipa',       name: 'Dua Lipa',         file: 'dualipa.png' },
+  { id: 'miley',         name: 'Miley',            file: 'miley.png' },
+  { id: 'christina',     name: 'Christina',        file: 'christina.png' },
+  { id: 'shakira',       name: 'Shakira',          file: 'shakira.png' },
+  { id: 'janet',         name: 'Janet',            file: 'janet.png' },
 ];
 
 export function getAvatarSrc(avatarId) {
