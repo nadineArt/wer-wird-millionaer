@@ -9,15 +9,14 @@ service cloud.firestore {
       allow update: if true;
     }
 
-    // Spiele + Fragen: öffentlich lesbar, schreiben nur über vertrauenswürdigen Client
-    // (kein Firebase Auth → wir verlassen uns auf strukturelle Validierung)
+    // Spiele + Fragen: öffentlich lesbar, schreiben erlaubt (kein Firebase Auth)
     match /games/{gameId} {
       allow read: if true;
-      allow write: if false;
+      allow write: if true;
 
       match /questions/{questionId} {
         allow read: if true;
-        allow write: if false;
+        allow write: if true;
       }
     }
 
