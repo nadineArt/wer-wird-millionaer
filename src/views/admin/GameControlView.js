@@ -53,11 +53,14 @@ function mountSessionStarter(container, games) {
     btn.textContent = '…';
 
     try {
-      const baseUrl = window.location.origin + window.location.pathname.replace('admin.html', 'index.html').replace(/\/[^/]*$/, '/');
+      const baseUrl = window.location.origin + window.location.pathname.replace(/admin\.html$/, '');
       const { id: sessionId, joinUrl } = await createSession(gameId, 'admin', baseUrl);
       showToast('Session eröffnet! QR-Code bereit.', 'success');
-      const session = await getOpenSession();
-      mountLiveControl(container, session);
+      const { getDoc, doc } = await import('firebase/firestore');
+      const { db } = await import('../../firebase/config.js');
+      const { COLLECTIONS } = await import('../../utils/constants.js');
+      const snap = await getDoc(doc(db, COLLECTIONS.SESSIONS, sessionId));
+      mountLiveControl(container, { id: snap.id, ...snap.data() });
     } catch (err) {
       showToast(err.message, 'error');
       btn.disabled = false;

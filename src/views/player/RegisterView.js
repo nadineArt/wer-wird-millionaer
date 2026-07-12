@@ -8,7 +8,9 @@ export async function mountRegisterView(container) {
   let session = null;
   try {
     session = await getOpenSession();
-  } catch {}
+  } catch (err) {
+    console.error('getOpenSession error:', err);
+  }
 
   if (!session) {
     container.innerHTML = `
