@@ -1,0 +1,52 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" width="200" height="200">
+  <defs>
+    <radialGradient id="bg" cx="50%" cy="35%" r="65%">
+      <stop offset="0%" stop-color="#c8860a"/>
+      <stop offset="100%" stop-color="#5c2d00"/>
+    </radialGradient>
+    <radialGradient id="face" cx="45%" cy="40%" r="60%">
+      <stop offset="0%" stop-color="#e2a25e"/>
+      <stop offset="100%" stop-color="#c68642"/>
+    </radialGradient>
+    <clipPath id="circle"><circle cx="100" cy="100" r="99"/></clipPath>
+  </defs>
+
+  <g clip-path="url(#circle)">
+    <!-- background -->
+    <rect width="200" height="200" fill="url(#bg)"/>
+
+    <!-- hair back layer -->
+    
+    <path d="M 56 84 C 16 95 10 168 24 200 L 176 200 C 190 168 184 95 144 84 C 126 72 112 68 100 68 C 88 68 74 72 56 84 Z" fill="#2a1200"/>
+    <path d="M 24 140 C 10 126 8 148 18 160 C 12 150 14 138 24 140 Z" fill="#2a1200" opacity="0.8"/>
+    <path d="M 176 140 C 190 126 192 148 182 160 C 188 150 186 138 176 140 Z" fill="#2a1200" opacity="0.8"/>
+
+    <!-- shoulders -->
+    <ellipse cx="100" cy="208" rx="72" ry="52" fill="#a86824"/>
+
+    <!-- neck -->
+    <rect x="88" y="140" width="24" height="38" rx="6" fill="url(#face)"/>
+
+    <!-- head -->
+    <ellipse cx="100" cy="112" rx="36" ry="40" fill="url(#face)"/>
+
+    <!-- hair crown (over top of head) -->
+    <path d="M 64 82 Q 100 65 136 82 Q 120 72 100 70 Q 80 72 64 82 Z" fill="#2a1200" opacity="0.85"/>
+
+    <!-- features -->
+    <path d="M 81 102 Q 87 99 93 102" fill="none" stroke="#1a0808" stroke-width="2" stroke-linecap="round"/>
+                 <path d="M 107 102 Q 113 99 119 102" fill="none" stroke="#1a0808" stroke-width="2" stroke-linecap="round"/>
+    <ellipse cx="87" cy="109" rx="5" ry="4" fill="#1a0808"/>
+                <circle cx="88.5" cy="107.5" r="1.2" fill="white" opacity="0.7"/>
+    <ellipse cx="113" cy="109" rx="5" ry="4" fill="#1a0808"/>
+                <circle cx="114.5" cy="107.5" r="1.2" fill="white" opacity="0.7"/>
+    <ellipse cx="100" cy="120" rx="3" ry="2" fill="#c68642" stroke="#00000020" stroke-width="1"/>
+    <path d="M 89 130 Q 100 137 111 130 Q 100 140 89 130 Z" fill="#cc2200"/>
+                 <path d="M 89 130 Q 100 127 111 130" fill="none" stroke="#cc2200" stroke-width="1.5"/>
+    
+  </g>
+
+  <!-- gold border -->
+  <circle cx="100" cy="100" r="96" fill="none" stroke="#f5a623" stroke-width="5" opacity="0.85"/>
+  <circle cx="100" cy="100" r="93" fill="none" stroke="#ffffff" stroke-width="1" opacity="0.15"/>
+</svg>
