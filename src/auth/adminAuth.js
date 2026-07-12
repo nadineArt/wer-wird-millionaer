@@ -85,7 +85,7 @@ export async function initAppConfig() {
     await setDoc(ref, {
       playerPasswordHash: await sha256('WWM'),
       adminPasswordHash: await sha256('admin'),
-      appTitle: existing.appTitle || 'Wer kennt ihn am besten?',
+      appTitle: existing.appTitle || 'Das ultimative Quiz zum Maximilianismus',
       configVersion: CONFIG_VERSION,
     });
   }

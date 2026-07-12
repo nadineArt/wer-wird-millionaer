@@ -33,11 +33,11 @@ export async function mountWinnerView(container) {
         ${player.name}!
       </div>
       <div class="winner-screen__subtitle">
-        Herzlichen Glückwunsch — du kennst ihn am besten von allen. Das ist einmalig.
+        Herzlichen Glückwunsch — du bist der ultimative Maximilianismus-Experte. Das ist einmalig.
       </div>
       <div class="winner-screen__stage">${stageName}</div>
       <p style="font-size:0.8rem;color:var(--color-text-muted);margin-top:0.5rem;">
-        Du bist offiziell die Person, die ihn am besten kennt. 🌟
+        Du bist offiziell zertifiziert im Maximilianismus. 🌟
       </p>
     </div>
   `;

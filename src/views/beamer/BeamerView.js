@@ -14,7 +14,7 @@ export function mountBeamerView(container) {
     if (!session) {
       container.innerHTML = `
         <div class="beamer-waiting anim-fade-in">
-          <div class="beamer-waiting__title">Wer kennt ihn<br/>am besten?</div>
+          <div class="beamer-waiting__title">Das ultimative Quiz<br/>zum Maximilianismus</div>
           <div class="beamer-waiting__sub">Warte auf den Spielmaster…</div>
           <div style="width:3rem;height:3rem;border:4px solid rgba(255,255,255,0.1);border-top-color:#f5a623;border-radius:50%;animation:spin 700ms linear infinite;margin-top:2rem;"></div>
         </div>
@@ -31,7 +31,7 @@ export function mountBeamerView(container) {
 
       container.innerHTML = `
         <div class="beamer-waiting anim-fade-in">
-          <div class="beamer-waiting__title">Wer kennt ihn<br/>am besten?</div>
+          <div class="beamer-waiting__title">Das ultimative Quiz<br/>zum Maximilianismus</div>
           <div class="beamer-waiting__sub">${session.gameTitle}</div>
 
           <div style="display:flex;align-items:center;gap:4vw;margin-top:3vh;flex-wrap:wrap;justify-content:center;">
@@ -80,7 +80,7 @@ export function mountBeamerView(container) {
             ${winners.length > 0 ? winners.map(w => w.name).join(' &amp; ') : 'Spiel beendet!'}
           </div>
           <div class="beamer-waiting__sub">
-            ${winners.length > 0 ? 'kennt ihn am besten.' : 'Alle ausgeschieden — knapp!'}
+            ${winners.length > 0 ? 'ist echter Maximilianismus-Experte! 🏆' : 'Alle ausgeschieden — knapp!'}
           </div>
         </div>
       `;

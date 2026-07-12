@@ -1,7 +1,7 @@
 {
-  "name": "Wer kennt ihn am besten?",
-  "short_name": "BdayQuiz",
-  "description": "Das Geburtstagsquiz — wer kennt das Geburtstagskind am besten?",
+  "name": "Das ultimative Quiz zum Maximilianismus",
+  "short_name": "Maximilianismus",
+  "description": "Das ultimative Quiz zum Maximilianismus",
   "start_url": "/",
   "display": "standalone",
   "background_color": "#08081a",

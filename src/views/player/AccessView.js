@@ -14,7 +14,7 @@ export async function mountAccessView(container) {
   container.innerHTML = `
     <div class="access-screen anim-fade-in">
       <div>
-        <div class="access-screen__logo">Wer kennt<br/>ihn am besten?</div>
+        <div class="access-screen__logo">Das ultimative Quiz<br/>zum Maximilianismus</div>
         <p class="access-screen__subtitle" style="margin-top:0.75rem;">Das Geburtstagsquiz für echte Freunde.</p>
       </div>
       <form class="access-screen__form" id="access-form">
