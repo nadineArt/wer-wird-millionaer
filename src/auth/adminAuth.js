@@ -98,3 +98,13 @@ export async function updatePasswords({ playerPassword, adminPassword }) {
   if (adminPassword)  updates.adminPasswordHash  = await sha256(adminPassword.trim());
   await setDoc(ref, updates, { merge: true });
 }
+
+export async function getAppTitle() {
+  const config = await getAppConfig();
+  return config?.appTitle || 'Das ultimative Quiz zum Maximilianismus';
+}
+
+export async function updateAppTitle(title) {
+  const ref = doc(db, COLLECTIONS.CONFIG, CONFIG_DOC);
+  await setDoc(ref, { appTitle: title.trim() }, { merge: true });
+}

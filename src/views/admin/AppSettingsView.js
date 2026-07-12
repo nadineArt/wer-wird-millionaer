@@ -1,12 +1,29 @@
-import { updatePasswords } from '../../auth/adminAuth.js';
+import { updatePasswords, getAppTitle, updateAppTitle } from '../../auth/adminAuth.js';
 import { showToast } from '../../utils/toast.js';
 
-export function mountAppSettingsView(container) {
+export async function mountAppSettingsView(container) {
+  const currentTitle = await getAppTitle();
+
   container.innerHTML = `
     <div>
       <div class="admin-page-header">
         <h2 class="admin-page-title">Einstellungen</h2>
       </div>
+
+      <div class="admin-card" style="max-width:480px;margin-bottom:var(--space-4);">
+        <div style="font-size:0.85rem;font-weight:700;margin-bottom:1rem;color:var(--color-text-muted);text-transform:uppercase;letter-spacing:0.06em;">
+          Beamer-Titel
+        </div>
+        <div class="form-group">
+          <label class="form-label">Titel auf dem Wartescreen</label>
+          <input class="input-field" type="text" id="app-title" value="${currentTitle}" maxlength="80" autocomplete="off" />
+        </div>
+        <button class="btn btn--primary" id="save-title-btn">Speichern</button>
+        <p style="font-size:0.75rem;color:var(--color-text-muted);margin-top:1rem;line-height:1.5;">
+          Wird sofort auf dem Beamer angezeigt — kein Reload nötig.
+        </p>
+      </div>
+
       <div class="admin-card" style="max-width:480px;">
         <div style="font-size:0.85rem;font-weight:700;margin-bottom:1rem;color:var(--color-text-muted);text-transform:uppercase;letter-spacing:0.06em;">
           Passwörter ändern
@@ -26,6 +43,20 @@ export function mountAppSettingsView(container) {
       </div>
     </div>
   `;
+
+  container.querySelector('#save-title-btn').addEventListener('click', async () => {
+    const title = container.querySelector('#app-title').value.trim();
+    if (!title) {
+      showToast('Titel darf nicht leer sein.', 'error');
+      return;
+    }
+    try {
+      await updateAppTitle(title);
+      showToast('Titel gespeichert! Beamer aktualisiert sich sofort.', 'success');
+    } catch (err) {
+      showToast(err.message, 'error');
+    }
+  });
 
   container.querySelector('#save-pw-btn').addEventListener('click', async () => {
     const playerPw = container.querySelector('#new-player-pw').value.trim();

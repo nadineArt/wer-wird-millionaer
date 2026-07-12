@@ -1,20 +1,31 @@
 import { watchSession, watchPlayers, watchAudienceVotes } from '../../services/sessionService.js';
-import { SESSION_STATUS, QUESTION_STATE, PLAYER_STATUS, ANSWERS } from '../../utils/constants.js';
+import { SESSION_STATUS, QUESTION_STATE, PLAYER_STATUS, ANSWERS, COLLECTIONS, CONFIG_DOC } from '../../utils/constants.js';
 import { getStageName } from '../../utils/stageDefaults.js';
 import { getAvatarSrc } from '../../utils/avatarData.js';
+import { db } from '../../firebase/config.js';
+import { doc, onSnapshot } from 'firebase/firestore';
 
 export function mountBeamerView(container) {
   let session = null;
   let players = [];
   let audienceVotes = null;
   let audienceUnsub = null;
+  let appTitle = 'Das ultimative Quiz zum Maximilianismus';
   const unsubs = [];
+
+  // Watch appTitle live so changes in admin settings show immediately
+  unsubs.push(onSnapshot(doc(db, COLLECTIONS.CONFIG, CONFIG_DOC), snap => {
+    if (snap.exists() && snap.data().appTitle) {
+      appTitle = snap.data().appTitle;
+      render();
+    }
+  }));
 
   function render() {
     if (!session) {
       container.innerHTML = `
         <div class="beamer-waiting anim-fade-in">
-          <div class="beamer-waiting__title">Das ultimative Quiz<br/>zum Maximilianismus</div>
+          <div class="beamer-waiting__title">${appTitle}</div>
           <div class="beamer-waiting__sub">Warte auf den Spielmaster…</div>
           <div style="width:3rem;height:3rem;border:4px solid rgba(255,255,255,0.1);border-top-color:#f5a623;border-radius:50%;animation:spin 700ms linear infinite;margin-top:2rem;"></div>
         </div>
@@ -31,7 +42,7 @@ export function mountBeamerView(container) {
 
       container.innerHTML = `
         <div class="beamer-waiting anim-fade-in">
-          <div class="beamer-waiting__title">Das ultimative Quiz<br/>zum Maximilianismus</div>
+          <div class="beamer-waiting__title">${appTitle}</div>
           <div class="beamer-waiting__sub">${session.gameTitle}</div>
 
           <div style="display:flex;align-items:center;gap:4vw;margin-top:3vh;flex-wrap:wrap;justify-content:center;">
