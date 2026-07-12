@@ -75,15 +75,18 @@ export function clearPlayerAccess() {
 }
 
 export async function initAppConfig() {
+  const CONFIG_VERSION = 1;
   const ref = doc(db, COLLECTIONS.CONFIG, CONFIG_DOC);
   const snap = await getDoc(ref);
-  if (!snap.exists()) {
-    const playerHash = await sha256('WWM');
-    const adminHash = await sha256('admin');
+
+  if (!snap.exists() || !snap.data().configVersion) {
+    // Doc missing or was manually created without configVersion — write correct hashes
+    const existing = snap.exists() ? snap.data() : {};
     await setDoc(ref, {
-      playerPasswordHash: playerHash,
-      adminPasswordHash: adminHash,
-      appTitle: 'Wer kennt ihn am besten?',
+      playerPasswordHash: await sha256('WWM'),
+      adminPasswordHash: await sha256('admin'),
+      appTitle: existing.appTitle || 'Wer kennt ihn am besten?',
+      configVersion: CONFIG_VERSION,
     });
   }
 }

@@ -176,5 +176,9 @@ export function mountBeamerView(container) {
     }));
   }
 
-  findAndWatchSession();
+  render(); // show spinner immediately before async work begins
+  findAndWatchSession().catch((err) => {
+    console.error('BeamerView init error:', err);
+    container.innerHTML = `<div class="beamer-waiting"><div class="beamer-waiting__title">Verbindungsfehler</div><div class="beamer-waiting__sub">${err.message}</div></div>`;
+  });
 }
