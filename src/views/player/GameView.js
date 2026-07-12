@@ -130,8 +130,8 @@ export function mountGameView(container) {
     });
   }
 
-  function renderAudienceChart() {
-    const el = container.querySelector('#audience-chart');
+  function renderAudienceChart(el) {
+    if (!el) el = container.querySelector('#audience-chart');
     if (!el || !state.audienceVotes) return;
 
     const votes = state.audienceVotes.votes || { A: 0, B: 0, C: 0, D: 0 };
@@ -198,7 +198,14 @@ export function mountGameView(container) {
       if (state.audienceUnsub) state.audienceUnsub();
       state.audienceUnsub = watchAudienceVotes(sessionId, qId, (data) => {
         state.audienceVotes = data;
-        render();
+        // Only update chart in-place — avoid full re-render which rebuilds
+        // the DOM and causes the listener to reference a stale element
+        const chartEl = container.querySelector('#audience-chart');
+        if (chartEl) {
+          renderAudienceChart(chartEl);
+        } else {
+          render();
+        }
       });
       render();
     }

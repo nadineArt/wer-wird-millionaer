@@ -17,10 +17,12 @@ export const AVATARS = [
   { id: 'janet',         name: 'Janet',            file: 'janet.jpg' },
 ];
 
+import { getCachedAvatarSrc } from '../services/avatarService.js';
+
 export function getAvatarSrc(avatarId) {
   const avatar = AVATARS.find(a => a.id === avatarId);
   if (!avatar) return 'assets/avatars/placeholder.png';
-  return `assets/avatars/${avatar.file}`;
+  return getCachedAvatarSrc(avatarId, avatar.file);
 }
 
 export function getAvatarName(avatarId) {

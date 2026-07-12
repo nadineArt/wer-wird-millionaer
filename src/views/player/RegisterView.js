@@ -24,6 +24,17 @@ export async function mountRegisterView(container) {
     return;
   }
 
+  if (session.status === 'active') {
+    container.innerHTML = `
+      <div class="access-screen anim-fade-in">
+        <div style="font-size:3rem;">🔒</div>
+        <div class="access-screen__logo" style="font-size:1.6rem;">Spiel läuft bereits</div>
+        <p class="access-screen__subtitle">Die Runde hat schon begonnen — neue Spieler können nicht mehr einsteigen.</p>
+      </div>
+    `;
+    return;
+  }
+
   let selectedAvatar = null;
 
   container.innerHTML = `
@@ -90,6 +101,10 @@ export async function mountRegisterView(container) {
       const currentSession = await getOpenSession();
       if (!currentSession) {
         showToast('Keine offene Session gefunden. Nochmal laden?', 'error');
+        return;
+      }
+      if (currentSession.status === 'active') {
+        showToast('Das Spiel hat bereits begonnen — du kannst nicht mehr einsteigen.', 'error');
         return;
       }
       await registerPlayer(currentSession.id, { name, avatar: selectedAvatar });

@@ -11,6 +11,7 @@ import { mountGameView } from './views/player/GameView.js';
 import { mountEliminatedView } from './views/player/EliminatedView.js';
 import { mountWinnerView } from './views/player/WinnerView.js';
 import { initAppConfig } from './auth/adminAuth.js';
+import { loadAvatarOverrides } from './services/avatarService.js';
 
 const app = document.getElementById('app');
 initRouter(app);
@@ -23,4 +24,5 @@ register('out',      (el) => mountEliminatedView(el));
 register('winner',   (el) => mountWinnerView(el));
 
 initAppConfig().catch(console.error);
+loadAvatarOverrides().catch(console.error);
 start();
