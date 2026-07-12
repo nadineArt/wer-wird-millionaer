@@ -1,4 +1,4 @@
-import { loginPlayer, isPlayerAccessGranted } from '../../auth/adminAuth.js';
+import { loginPlayer, isPlayerAccessGranted, getAppTitle } from '../../auth/adminAuth.js';
 import { showToast } from '../../utils/toast.js';
 import { navigate } from '../../router/playerRouter.js';
 import { getOpenSession } from '../../services/sessionService.js';
@@ -11,10 +11,12 @@ export async function mountAccessView(container) {
     return;
   }
 
+  const appTitle = await getAppTitle().catch(() => 'Das ultimative Quiz zum Maximilianismus');
+
   container.innerHTML = `
     <div class="access-screen anim-fade-in">
       <div>
-        <div class="access-screen__logo">Das ultimative Quiz<br/>zum Maximilianismus</div>
+        <div class="access-screen__logo">${appTitle}</div>
         <p class="access-screen__subtitle" style="margin-top:0.75rem;">Das Geburtstagsquiz für echte Freunde.</p>
       </div>
       <form class="access-screen__form" id="access-form">

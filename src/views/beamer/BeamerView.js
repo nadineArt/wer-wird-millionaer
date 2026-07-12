@@ -10,13 +10,15 @@ export function mountBeamerView(container) {
   let players = [];
   let audienceVotes = null;
   let audienceUnsub = null;
-  let appTitle = 'Das ultimative Quiz zum Maximilianismus';
+  let appTitle  = '';
+  let themeWord = 'Maximilianismus';
   const unsubs = [];
 
-  // Watch appTitle live so changes in admin settings show immediately
+  // Watch appTitle + themeWord live so changes in admin settings show immediately
   unsubs.push(onSnapshot(doc(db, COLLECTIONS.CONFIG, CONFIG_DOC), snap => {
-    if (snap.exists() && snap.data().appTitle) {
-      appTitle = snap.data().appTitle;
+    if (snap.exists()) {
+      appTitle  = snap.data().appTitle  || 'Das ultimative Quiz zum Maximilianismus';
+      themeWord = snap.data().themeWord || 'Maximilianismus';
       render();
     }
   }));
@@ -91,7 +93,7 @@ export function mountBeamerView(container) {
             ${winners.length > 0 ? winners.map(w => w.name).join(' &amp; ') : 'Spiel beendet!'}
           </div>
           <div class="beamer-waiting__sub">
-            ${winners.length > 0 ? 'ist echter Maximilianismus-Experte! 🏆' : 'Alle ausgeschieden — knapp!'}
+            ${winners.length > 0 ? `ist echter ${themeWord}-Experte! 🏆` : 'Alle ausgeschieden — knapp!'}
           </div>
         </div>
       `;

@@ -80,12 +80,12 @@ export async function initAppConfig() {
   const snap = await getDoc(ref);
 
   if (!snap.exists() || !snap.data().configVersion) {
-    // Doc missing or was manually created without configVersion — write correct hashes
     const existing = snap.exists() ? snap.data() : {};
     await setDoc(ref, {
       playerPasswordHash: await sha256('WWM'),
       adminPasswordHash: await sha256('admin'),
-      appTitle: existing.appTitle || 'Das ultimative Quiz zum Maximilianismus',
+      appTitle:  existing.appTitle  || 'Das ultimative Quiz zum Maximilianismus',
+      themeWord: existing.themeWord || 'Maximilianismus',
       configVersion: CONFIG_VERSION,
     });
   }
@@ -104,7 +104,23 @@ export async function getAppTitle() {
   return config?.appTitle || 'Das ultimative Quiz zum Maximilianismus';
 }
 
+export async function getFullAppConfig() {
+  const config = await getAppConfig();
+  return {
+    appTitle:  config?.appTitle  || 'Das ultimative Quiz zum Maximilianismus',
+    themeWord: config?.themeWord || 'Maximilianismus',
+  };
+}
+
 export async function updateAppTitle(title) {
   const ref = doc(db, COLLECTIONS.CONFIG, CONFIG_DOC);
   await setDoc(ref, { appTitle: title.trim() }, { merge: true });
+}
+
+export async function updateAppConfig({ appTitle, themeWord }) {
+  const ref = doc(db, COLLECTIONS.CONFIG, CONFIG_DOC);
+  const updates = {};
+  if (appTitle  !== undefined) updates.appTitle  = appTitle.trim();
+  if (themeWord !== undefined) updates.themeWord = themeWord.trim();
+  await setDoc(ref, updates, { merge: true });
 }
