@@ -24,6 +24,11 @@ export function mountBeamerView(container) {
 
     if (session.status === SESSION_STATUS.WAITING) {
       const activePlayers = players.filter(p => p.status !== PLAYER_STATUS.ELIMINATED);
+      const qrSize = Math.min(Math.round(window.innerWidth * 0.22), 300);
+      const qrUrl = session.joinUrl
+        ? `https://api.qrserver.com/v1/create-qr-code/?size=${qrSize}x${qrSize}&data=${encodeURIComponent(session.joinUrl)}&bgcolor=ffffff&color=000000&margin=2`
+        : '';
+
       container.innerHTML = `
         <div class="beamer-waiting anim-fade-in">
           <div class="beamer-waiting__title">Wer kennt ihn<br/>am besten?</div>
@@ -31,17 +36,18 @@ export function mountBeamerView(container) {
 
           <div style="display:flex;align-items:center;gap:4vw;margin-top:3vh;flex-wrap:wrap;justify-content:center;">
             <div style="display:flex;flex-direction:column;align-items:center;gap:1vh;">
-              <canvas id="beamer-qr" style="border-radius:1rem;"></canvas>
+              <img src="${qrUrl}" width="${qrSize}" height="${qrSize}"
+                style="border-radius:1rem;background:#fff;display:block;" alt="QR Code" />
               <div style="font-size:clamp(0.7rem,1.2vw,1rem);color:var(--color-text-muted);">
                 Smartphone scannen &amp; mitspielen
               </div>
-              <div style="font-size:clamp(0.6rem,1vw,0.85rem);color:var(--color-accent);word-break:break-all;max-width:30vw;text-align:center;">
+              <div style="font-size:clamp(0.55rem,0.9vw,0.8rem);color:var(--color-accent);word-break:break-all;max-width:32vw;text-align:center;">
                 ${session.joinUrl || ''}
               </div>
             </div>
 
-            ${activePlayers.length > 0 ? `
-              <div style="display:flex;flex-direction:column;gap:1.5vh;align-items:flex-start;">
+            <div style="display:flex;flex-direction:column;gap:1.5vh;align-items:flex-start;">
+              ${activePlayers.length > 0 ? `
                 <div style="font-size:clamp(0.8rem,1.4vw,1.1rem);color:var(--color-text-muted);font-weight:700;text-transform:uppercase;letter-spacing:0.08em;">
                   ${activePlayers.length} dabei
                 </div>
@@ -53,16 +59,15 @@ export function mountBeamerView(container) {
                     </div>
                   `).join('')}
                 </div>
-              </div>
-            ` : `
-              <div style="font-size:clamp(1rem,2vw,1.5rem);color:var(--color-text-muted);">
-                Noch niemand da… 👀
-              </div>
-            `}
+              ` : `
+                <div style="font-size:clamp(1rem,2vw,1.5rem);color:var(--color-text-muted);">
+                  Noch niemand da… 👀
+                </div>
+              `}
+            </div>
           </div>
         </div>
       `;
-      renderBeamerQR(session.joinUrl);
       return;
     }
 
@@ -154,24 +159,6 @@ export function mountBeamerView(container) {
         </div>
       </div>
     `;
-  }
-
-  async function renderBeamerQR(url) {
-    if (!url) return;
-    try {
-      const QRCode = (await import('qrcode')).default;
-      const canvas = container.querySelector('#beamer-qr');
-      if (canvas) {
-        const size = Math.min(Math.round(window.innerWidth * 0.22), 320);
-        await QRCode.toCanvas(canvas, url, {
-          width: size,
-          margin: 2,
-          color: { dark: '#000000', light: '#ffffff' },
-        });
-      }
-    } catch (err) {
-      console.error('QR render error:', err);
-    }
   }
 
   async function findAndWatchSession() {
