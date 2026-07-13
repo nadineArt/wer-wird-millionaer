@@ -3,6 +3,7 @@ import { watchSession } from '../../services/sessionService.js';
 import { SESSION_STATUS } from '../../utils/constants.js';
 import { getStageName } from '../../utils/stageDefaults.js';
 import { navigate } from '../../router/playerRouter.js';
+import { t } from '../../services/textService.js';
 
 export async function mountEliminatedView(container) {
   const sessionId = getStoredSessionId();
@@ -29,16 +30,16 @@ export async function mountEliminatedView(container) {
   container.innerHTML = `
     <div class="eliminated-screen anim-fade-in">
       <div class="eliminated-screen__icon">💔</div>
-      <div class="eliminated-screen__title">Oops. Das war wohl nichts.</div>
+      <div class="eliminated-screen__title">${t('eliminatedTitle')}</div>
       <div class="eliminated-screen__stage">
         Du hast gesichert:
         <strong>${safeStage > 0 ? stageName : 'Gar nichts. Zurück auf Los.'}</strong>
       </div>
       <p style="font-size:0.85rem;color:var(--color-text-muted);max-width:280px;text-align:center;line-height:1.6;">
-        Vielleicht kennst du ihn doch nicht so gut wie du dachtest. Aber hey — du warst dabei. 🌹
+        ${t('eliminatedBody')}
       </p>
       <button class="eliminated-screen__watch-btn" id="watch-btn">
-        Trotzdem zuschauen
+        ${t('eliminatedWatchButton')}
       </button>
     </div>
   `;

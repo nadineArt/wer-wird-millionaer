@@ -1,5 +1,6 @@
 import { getStoredPlayerId, getStoredSessionId, getPlayer } from '../../services/playerService.js';
 import { getFullAppConfig } from '../../auth/adminAuth.js';
+import { t } from '../../services/textService.js';
 import { navigate } from '../../router/playerRouter.js';
 import { getAvatarSrc } from '../../utils/avatarData.js';
 import { getStageName } from '../../utils/stageDefaults.js';
@@ -36,11 +37,11 @@ export async function mountWinnerView(container) {
         ${player.name}!
       </div>
       <div class="winner-screen__subtitle">
-        Herzlichen Glückwunsch — du bist der ultimative ${themeWord}-Experte. Das ist einmalig.
+        ${t('winnerSubtitle', { themeWord })}
       </div>
       <div class="winner-screen__stage">${stageName}</div>
       <p style="font-size:0.8rem;color:var(--color-text-muted);margin-top:0.5rem;">
-        Du bist offiziell zertifiziert im ${themeWord}. 🌟
+        ${t('winnerCertificate', { themeWord })}
       </p>
     </div>
   `;

@@ -5,6 +5,7 @@ import './styles/views-admin.css';
 
 import { isAdminAuthenticated, logoutAdmin, initAppConfig } from './auth/adminAuth.js';
 import { loadAvatarOverrides } from './services/avatarService.js';
+import { loadUiTexts } from './services/textService.js';
 import { mountAdminLoginView } from './views/admin/AdminLoginView.js';
 import { mountAdminDashboardView } from './views/admin/AdminDashboardView.js';
 import { mountGameManagerView } from './views/admin/GameManagerView.js';
@@ -13,12 +14,14 @@ import { mountStageConfigView } from './views/admin/StageConfigView.js';
 import { mountGameControlView } from './views/admin/GameControlView.js';
 import { mountAppSettingsView } from './views/admin/AppSettingsView.js';
 import { mountAvatarManagerView } from './views/admin/AvatarManagerView.js';
+import { mountTextEditorView } from './views/admin/TextEditorView.js';
 
 const adminApp = document.getElementById('admin-app');
 
 async function init() {
   await initAppConfig();
   await loadAvatarOverrides().catch(console.error);
+  await loadUiTexts().catch(console.error);
 
   if (!isAdminAuthenticated()) {
     adminApp.innerHTML = '';
@@ -55,6 +58,7 @@ function renderShell() {
           <div class="admin-nav__item" data-route="stages"><span class="admin-nav__icon">🏆</span>Stufen</div>
           <div class="admin-nav__section">System</div>
           <div class="admin-nav__item" data-route="avatars"><span class="admin-nav__icon">🎭</span>Avatare</div>
+          <div class="admin-nav__item" data-route="texts"><span class="admin-nav__icon">✏️</span>Texte</div>
           <div class="admin-nav__item" data-route="settings"><span class="admin-nav__icon">⚙️</span>Einstellungen</div>
           <div class="admin-nav__item" data-route="dashboard"><span class="admin-nav__icon">🏠</span>Dashboard</div>
         </nav>
@@ -93,6 +97,7 @@ function renderShell() {
     stages:    mountStageConfigView,
     settings:  mountAppSettingsView,
     avatars:   mountAvatarManagerView,
+    texts:     mountTextEditorView,
   };
 
   function navigate() {

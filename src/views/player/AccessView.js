@@ -1,4 +1,5 @@
 import { loginPlayer, isPlayerAccessGranted, getAppTitle } from '../../auth/adminAuth.js';
+import { t } from '../../services/textService.js';
 import { showToast } from '../../utils/toast.js';
 import { navigate } from '../../router/playerRouter.js';
 import { getOpenSession } from '../../services/sessionService.js';
@@ -17,7 +18,7 @@ export async function mountAccessView(container) {
     <div class="access-screen anim-fade-in">
       <div>
         <div class="access-screen__logo">${appTitle}</div>
-        <p class="access-screen__subtitle" style="margin-top:0.75rem;">Das Geburtstagsquiz für echte Freunde.</p>
+        <p class="access-screen__subtitle" style="margin-top:0.75rem;">${t('accessSubtitle')}</p>
       </div>
       <form class="access-screen__form" id="access-form">
         <input
@@ -28,7 +29,7 @@ export async function mountAccessView(container) {
           autocomplete="current-password"
           autofocus
         />
-        <button type="submit" class="submit-btn">Rein da ✨</button>
+        <button type="submit" class="submit-btn">${t('accessButton')}</button>
       </form>
     </div>
   `;

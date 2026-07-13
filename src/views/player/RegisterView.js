@@ -3,6 +3,7 @@ import { registerPlayer } from '../../services/playerService.js';
 import { getOpenSession } from '../../services/sessionService.js';
 import { showToast } from '../../utils/toast.js';
 import { navigate } from '../../router/playerRouter.js';
+import { t } from '../../services/textService.js';
 
 export async function mountRegisterView(container) {
   let session = null;
@@ -40,8 +41,8 @@ export async function mountRegisterView(container) {
   container.innerHTML = `
     <div class="register-screen anim-fade-slide-up" style="width:100%;max-width:480px;margin:0 auto;padding:1.5rem 1rem 2rem;">
       <div style="text-align:center;margin-bottom:1.5rem;">
-        <div class="register-screen__title">Wähle deinen Look</div>
-        <p class="register-screen__sub">Wer bist du heute Abend?</p>
+        <div class="register-screen__title">${t('registerTitle')}</div>
+        <p class="register-screen__sub">${t('registerSubtitle')}</p>
       </div>
 
       <div class="avatar-picker" id="avatar-grid"></div>
@@ -56,7 +57,7 @@ export async function mountRegisterView(container) {
           autocomplete="off"
         />
         <button class="submit-btn" id="join-btn" disabled>
-          Ich bin dabei 🎉
+          ${t('registerButton')}
         </button>
       </div>
     </div>
@@ -115,7 +116,7 @@ export async function mountRegisterView(container) {
       setTimeout(() => nameInput.classList.remove('input-field--error'), 2000);
     } finally {
       joinBtn.disabled = false;
-      joinBtn.textContent = 'Ich bin dabei 🎉';
+      joinBtn.textContent = t('registerButton');
     }
   });
 }
