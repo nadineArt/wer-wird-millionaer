@@ -1,5 +1,5 @@
 import { db } from '../firebase/config.js';
-import { doc, updateDoc, getDocs, collection, setDoc, serverTimestamp, increment } from 'firebase/firestore';
+import { doc, updateDoc, getDocs, getDoc, collection, setDoc, serverTimestamp } from 'firebase/firestore';
 import { COLLECTIONS, JOKER_TYPES, ANSWERS } from '../utils/constants.js';
 import { t } from './textService.js';
 
@@ -47,7 +47,8 @@ export async function useAudienceJoker(sessionId, playerId, questionId) {
 
   if (!questionId) return;
 
-  // Backfill votes from players who already submitted before the joker was activated
+  // Rebuild votes from all player answers — this is the authoritative snapshot
+  // at joker-activation time. Overwrites the pre-created empty doc entirely.
   const playersSnap = await getDocs(
     collection(db, COLLECTIONS.SESSIONS, sessionId, 'players')
   );
@@ -61,7 +62,9 @@ export async function useAudienceJoker(sessionId, playerId, questionId) {
     }
   }
   const voteRef = doc(db, COLLECTIONS.SESSIONS, sessionId, 'audienceVotes', questionId);
-  await setDoc(voteRef, { votes, voters, updatedAt: serverTimestamp() }, { merge: true });
+  // Use setDoc without merge to fully overwrite — avoids stale data from
+  // any prior increment() writes that used wrong dotted-key paths
+  await setDoc(voteRef, { votes, voters, updatedAt: serverTimestamp() });
 }
 
 export function getJokerMeta() {

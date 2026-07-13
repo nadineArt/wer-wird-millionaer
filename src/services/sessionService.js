@@ -1,7 +1,7 @@
 import { db } from '../firebase/config.js';
 import {
   collection, doc, addDoc, updateDoc, getDoc, getDocs,
-  query, where, onSnapshot, serverTimestamp, writeBatch,
+  query, where, onSnapshot, serverTimestamp, writeBatch, setDoc,
 } from 'firebase/firestore';
 import { COLLECTIONS, SESSION_STATUS, QUESTION_STATE, PLAYER_STATUS } from '../utils/constants.js';
 import { getQuestions, getGame } from './gameService.js';
@@ -74,6 +74,14 @@ export async function startGame(sessionId) {
     currentQuestionState: QUESTION_STATE.WAITING,
     startedAt: serverTimestamp(),
   });
+
+  // Pre-create audienceVotes doc with nested votes object so update() can
+  // write to votes.A/B/C/D via dotted-key paths correctly
+  await setDoc(
+    doc(db, COLLECTIONS.SESSIONS, sessionId, 'audienceVotes', firstQ.id),
+    { votes: { A: 0, B: 0, C: 0, D: 0 }, voters: {} },
+    { merge: true },
+  );
 }
 
 export async function revealAnswer(sessionId) {
@@ -169,6 +177,12 @@ export async function nextQuestion(sessionId) {
     currentQuestionIndex: nextIndex,
     currentQuestionState: QUESTION_STATE.WAITING,
   });
+
+  await setDoc(
+    doc(db, COLLECTIONS.SESSIONS, sessionId, 'audienceVotes', nextQ.id),
+    { votes: { A: 0, B: 0, C: 0, D: 0 }, voters: {} },
+    { merge: true },
+  );
 }
 
 export async function finishSession(sessionId) {

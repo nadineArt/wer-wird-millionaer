@@ -83,11 +83,13 @@ export async function submitAnswer(sessionId, playerId, questionId, answer, sess
     lastSeenAt: serverTimestamp(),
   });
 
-  batch.set(audienceVoteRef(sessionId, questionId), {
+  // Doc is pre-created by sessionService when a question starts,
+  // so update() correctly resolves dotted keys as nested field paths
+  batch.update(audienceVoteRef(sessionId, questionId), {
     [`votes.${answer}`]: increment(1),
     [`voters.${playerId}`]: answer,
     updatedAt: serverTimestamp(),
-  }, { merge: true });
+  });
 
   await batch.commit();
 }
