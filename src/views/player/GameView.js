@@ -147,7 +147,9 @@ export function mountGameView(container) {
           const pct = Math.round((count / total) * 100);
           return `
             <div class="audience-bar">
-              <div class="audience-bar__fill" style="height:${Math.max(pct, 2)}px;max-height:80px;"></div>
+              <div class="audience-bar__track">
+                <div class="audience-bar__fill" style="height:${Math.max(pct, 2)}%;"></div>
+              </div>
               <div class="audience-bar__label">${letter}</div>
               <div class="audience-bar__pct">${pct}%</div>
             </div>
