@@ -108,16 +108,17 @@ export async function mountTextEditorView(container) {
       row.innerHTML = `
         <div class="text-editor-row__label">
           <span>${field.label}</span>
-          <span class="text-editor-default" data-key="${field.key}" title="Standard: ${escHtml(TEXT_DEFAULTS[field.key])}">Standard</span>
+          <span class="text-editor-default" data-reset-key="${field.key}" title="Standard: ${escHtml(TEXT_DEFAULTS[field.key])}">Standard</span>
         </div>
         ${isLong
-          ? `<textarea class="input-field text-editor-input" data-key="${field.key}" rows="3" style="resize:vertical;">${escHtml(defaultVal)}</textarea>`
+          ? `<textarea class="input-field text-editor-input" data-key="${field.key}" rows="3" style="resize:vertical;"></textarea>`
           : `<input class="input-field text-editor-input" type="text" data-key="${field.key}" value="${escHtml(defaultVal)}" />`
         }
         <div class="text-editor-row__preview" id="preview-${field.key}"></div>
       `;
 
-      const inputEl = row.querySelector(`[data-key="${field.key}"]`);
+      const inputEl = row.querySelector(`input[data-key="${field.key}"], textarea[data-key="${field.key}"]`);
+      if (isLong) inputEl.value = defaultVal;
       inputs[field.key] = inputEl;
 
       if (isDirty) row.classList.add('text-editor-row--dirty');
@@ -128,7 +129,7 @@ export async function mountTextEditorView(container) {
         updatePreview(field.key, inputEl.value);
       });
 
-      row.querySelector('.text-editor-default').addEventListener('click', () => {
+      row.querySelector('[data-reset-key]').addEventListener('click', () => {
         inputEl.value = TEXT_DEFAULTS[field.key];
         row.classList.remove('text-editor-row--dirty');
         updatePreview(field.key, TEXT_DEFAULTS[field.key]);
