@@ -191,6 +191,10 @@ body.beamer-mode {
   gap: 3px;
 }
 
+.beamer-ladder--full {
+  gap: 2px;
+}
+
 .beamer-ladder-step {
   display: flex;
   align-items: center;
@@ -202,6 +206,23 @@ body.beamer-mode {
   color: var(--color-text-muted);
 }
 
+.beamer-ladder--full .beamer-ladder-step {
+  justify-content: space-between;
+  padding: 0.3vh 1vw;
+  font-size: clamp(0.5rem, 0.85vw, 0.75rem);
+}
+
+.beamer-ladder-level-num {
+  font-size: 0.7em;
+  opacity: 0.5;
+  margin-right: 0.3em;
+  flex-shrink: 0;
+}
+
+.beamer-ladder-label {
+  flex: 1;
+}
+
 .beamer-ladder-step--active {
   background: rgba(245,166,35,0.15);
   color: var(--color-accent);
@@ -210,4 +231,46 @@ body.beamer-mode {
 
 .beamer-ladder-step--safe {
   color: var(--color-correct);
+}
+
+.beamer-ladder-avatars {
+  display: flex;
+  gap: 0.3vw;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+.beamer-ladder-avatar {
+  width: 1.4rem;
+  height: 1.4rem;
+  border-radius: var(--radius-full);
+  object-fit: cover;
+  border: 1.5px solid var(--color-accent);
+}
+
+.beamer-ladder-avatar--eliminated {
+  filter: grayscale(1);
+  opacity: 0.6;
+  border-color: var(--glass-border);
+}
+
+.beamer-vote-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.5rem;
+  height: 1.5rem;
+  border-radius: var(--radius-full);
+  font-size: 0.75rem;
+  font-weight: 900;
+  flex-shrink: 0;
+  color: var(--color-bg);
+}
+
+.beamer-vote-badge--correct {
+  background: var(--color-correct);
+}
+
+.beamer-vote-badge--wrong {
+  background: var(--color-wrong);
 }

@@ -86,14 +86,47 @@ export function mountBeamerView(container) {
 
     if (session.status === SESSION_STATUS.FINISHED) {
       const winners = players.filter(p => p.status === PLAYER_STATUS.WINNER);
-      container.innerHTML = `
-        <div class="beamer-waiting anim-fade-in">
-          <div style="font-size:clamp(3rem,8vw,8rem);">👑</div>
-          <div class="beamer-waiting__title">
-            ${winners.length > 0 ? winners.map(w => w.name).join(' &amp; ') : 'Spiel beendet!'}
+
+      if (winners.length > 0) {
+        container.innerHTML = `
+          <div class="beamer-waiting anim-fade-in">
+            <div style="font-size:clamp(3rem,8vw,8rem);">👑</div>
+            <div class="beamer-waiting__title">${winners.map(w => w.name).join(' &amp; ')}</div>
+            <div class="beamer-waiting__sub">ist echter ${themeWord}-Experte! 🏆</div>
           </div>
-          <div class="beamer-waiting__sub">
-            ${winners.length > 0 ? `ist echter ${themeWord}-Experte! 🏆` : 'Alle ausgeschieden — knapp!'}
+        `;
+        return;
+      }
+
+      const finishedLabels = session.stageLabels || [];
+      const finishedLadderHtml = [...finishedLabels].reverse().map(s => {
+        const playersHere = players.filter(p => p.currentStage === s.level);
+        const avatarHtml = playersHere.length > 0
+          ? `<div class="beamer-ladder-avatars">${playersHere.map(p =>
+              `<img src="${getAvatarSrc(p.avatar)}" class="beamer-ladder-avatar" title="${p.name}" alt="${p.name}" />`
+            ).join('')}</div>`
+          : '';
+        return `
+          <div class="beamer-ladder-step ${s.isSafe ? 'beamer-ladder-step--safe' : ''}">
+            <span class="beamer-ladder-level-num">${s.level}</span>
+            <span class="beamer-ladder-label">${s.label}${s.isSafe ? ' ✓' : ''}</span>
+            ${avatarHtml}
+          </div>
+        `;
+      }).join('');
+
+      container.innerHTML = `
+        <div class="beamer-screen anim-fade-in">
+          <div class="beamer-header">
+            <div class="beamer-logo">${session.gameTitle}</div>
+          </div>
+          <div class="beamer-main" style="align-items:center;">
+            <div style="font-size:clamp(3rem,6vw,6rem);">💀</div>
+            <div class="beamer-waiting__title" style="font-size:clamp(1.5rem,3.5vw,3.5rem);">Spiel beendet!</div>
+            <div class="beamer-waiting__sub">Alle ausgeschieden — knapp!</div>
+          </div>
+          <div class="beamer-footer" style="justify-content:flex-end;">
+            <div class="beamer-ladder beamer-ladder--full">${finishedLadderHtml}</div>
           </div>
         </div>
       `;
@@ -146,28 +179,46 @@ export function mountBeamerView(container) {
         <div class="beamer-footer">
           <div class="beamer-players">
             ${players.map(p => {
-              const answered = question && p.answers?.[session.currentQuestionId]?.submitted;
+              const submitted = question && p.answers?.[session.currentQuestionId]?.submitted;
               const isElim = p.status === PLAYER_STATUS.ELIMINATED;
               let cls = 'beamer-player-chip';
-              if (answered) cls += ' beamer-player-chip--answered';
+              if (submitted) cls += ' beamer-player-chip--answered';
               if (isElim) cls += ' beamer-player-chip--eliminated';
+              let voteBadge = '';
+              if (revealed && submitted) {
+                const isCorrect = submitted === question.correctAnswer;
+                voteBadge = `<span class="beamer-vote-badge ${isCorrect ? 'beamer-vote-badge--correct' : 'beamer-vote-badge--wrong'}">${submitted}</span>`;
+              }
               return `
                 <div class="${cls}">
                   <img src="${getAvatarSrc(p.avatar)}" alt="${p.name}" />
                   <span>${p.name}</span>
+                  ${voteBadge}
                 </div>
               `;
             }).join('')}
           </div>
 
-          <div class="beamer-ladder" id="beamer-ladder">
-            ${stageLabels.slice(Math.max(0, qIndex - 2), qIndex + 3).reverse().map(s => `
-              <div class="beamer-ladder-step ${s.level === qIndex + 1 ? 'beamer-ladder-step--active' : ''} ${s.isSafe ? 'beamer-ladder-step--safe' : ''}">
-                <span style="font-size:0.7em;opacity:0.5;margin-right:0.3em;">${s.level}</span>
-                ${s.label}
-                ${s.isSafe ? ' ✓' : ''}
-              </div>
-            `).join('')}
+          <div class="beamer-ladder ${revealed ? 'beamer-ladder--full' : ''}" id="beamer-ladder">
+            ${(revealed
+              ? [...stageLabels].reverse()
+              : stageLabels.slice(Math.max(0, qIndex - 2), qIndex + 3).reverse()
+            ).map(s => {
+              const playersHere = revealed ? players.filter(p => p.currentStage === s.level) : [];
+              const avatarHtml = playersHere.length > 0
+                ? `<div class="beamer-ladder-avatars">${playersHere.map(p => {
+                    const isElim = p.status === PLAYER_STATUS.ELIMINATED;
+                    return `<img src="${getAvatarSrc(p.avatar)}" class="beamer-ladder-avatar${isElim ? ' beamer-ladder-avatar--eliminated' : ''}" title="${p.name}" alt="${p.name}" />`;
+                  }).join('')}</div>`
+                : '';
+              return `
+                <div class="beamer-ladder-step ${s.level === qIndex + 1 ? 'beamer-ladder-step--active' : ''} ${s.isSafe ? 'beamer-ladder-step--safe' : ''}">
+                  <span class="beamer-ladder-level-num">${s.level}</span>
+                  <span class="beamer-ladder-label">${s.label}${s.isSafe ? ' ✓' : ''}</span>
+                  ${avatarHtml}
+                </div>
+              `;
+            }).join('')}
           </div>
         </div>
       </div>

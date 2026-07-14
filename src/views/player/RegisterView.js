@@ -1,4 +1,5 @@
 import { AVATARS } from '../../utils/avatarData.js';
+import { getCachedAvatarSrc, loadAvatarOverrides } from '../../services/avatarService.js';
 import { registerPlayer } from '../../services/playerService.js';
 import { getOpenSession } from '../../services/sessionService.js';
 import { showToast } from '../../utils/toast.js';
@@ -36,6 +37,8 @@ export async function mountRegisterView(container) {
     return;
   }
 
+  await loadAvatarOverrides().catch(() => {});
+
   let selectedAvatar = null;
 
   container.innerHTML = `
@@ -72,7 +75,7 @@ export async function mountRegisterView(container) {
     el.className = 'avatar-option anim-avatar-in';
     el.dataset.id = avatar.id;
     el.innerHTML = `
-      <img src="assets/avatars/${avatar.file}" alt="${avatar.name}" loading="lazy"
+      <img src="${getCachedAvatarSrc(avatar.id, avatar.file)}" alt="${avatar.name}" loading="lazy"
            onerror="this.style.background='#f5a623';this.alt='${avatar.name[0]}'" />
       <span class="avatar-option__name">${avatar.name}</span>
     `;
