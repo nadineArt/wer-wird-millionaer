@@ -1,4 +1,4 @@
-const CACHE = 'wwm-v1';
+const CACHE = 'wwm-v2';
 const SHELL = ['/', '/index.html', '/admin.html', '/beamer.html', '/js/player.js', '/js/admin.js', '/js/beamer.js'];
 
 self.addEventListener('install', e => {
