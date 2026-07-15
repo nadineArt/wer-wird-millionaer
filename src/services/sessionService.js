@@ -5,7 +5,6 @@ import {
 } from 'firebase/firestore';
 import { COLLECTIONS, SESSION_STATUS, QUESTION_STATE, PLAYER_STATUS } from '../utils/constants.js';
 import { getQuestions, getGame } from './gameService.js';
-import { getSafeStageFor } from '../utils/stageDefaults.js';
 
 const sessionsRef = () => collection(db, COLLECTIONS.SESSIONS);
 const sessionRef = (id) => doc(db, COLLECTIONS.SESSIONS, id);
@@ -118,12 +117,12 @@ export async function revealAnswer(sessionId) {
         currentStage,
       });
     } else {
-      const safeStage = getSafeStageFor(currentStage - 1, stageLabels);
+      const lastCorrectStage = currentQuestionIndex; // 0 if failed on first question
       batch.update(playerDoc.ref, {
         [`answers.${currentQuestionId}.correct`]: false,
         status: PLAYER_STATUS.ELIMINATED,
-        eliminatedAtStage: safeStage,
-        currentStage: safeStage,
+        eliminatedAtStage: lastCorrectStage,
+        currentStage: lastCorrectStage,
       });
     }
   }

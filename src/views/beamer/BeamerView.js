@@ -101,16 +101,18 @@ export function mountBeamerView(container) {
       const finishedLabels = session.stageLabels || [];
       const finishedLadderHtml = [...finishedLabels].reverse().map(s => {
         const playersHere = players.filter(p => p.currentStage === s.level);
-        const avatarHtml = playersHere.length > 0
-          ? `<div class="beamer-ladder-avatars">${playersHere.map(p =>
-              `<img src="${getAvatarSrc(p.avatar)}" class="beamer-ladder-avatar" title="${p.name}" alt="${p.name}" />`
-            ).join('')}</div>`
+        const playersHtml = playersHere.length > 0
+          ? `<div class="beamer-ladder-avatars">${playersHere.map(p => `
+              <div class="beamer-ladder-player">
+                <img src="${getAvatarSrc(p.avatar)}" class="beamer-ladder-avatar" alt="${p.name}" />
+                <span class="beamer-ladder-player-name">${p.name}</span>
+              </div>`).join('')}</div>`
           : '';
         return `
           <div class="beamer-ladder-step ${s.isSafe ? 'beamer-ladder-step--safe' : ''}">
             <span class="beamer-ladder-level-num">${s.level}</span>
             <span class="beamer-ladder-label">${s.label}${s.isSafe ? ' ✓' : ''}</span>
-            ${avatarHtml}
+            ${playersHtml}
           </div>
         `;
       }).join('');
@@ -119,14 +121,10 @@ export function mountBeamerView(container) {
         <div class="beamer-screen anim-fade-in">
           <div class="beamer-header">
             <div class="beamer-logo">${session.gameTitle}</div>
+            <div style="font-size:clamp(0.9rem,1.8vw,1.5rem);font-weight:800;color:var(--color-text-muted);">💀 Alle ausgeschieden — knapp!</div>
           </div>
-          <div class="beamer-main" style="align-items:center;">
-            <div style="font-size:clamp(3rem,6vw,6rem);">💀</div>
-            <div class="beamer-waiting__title" style="font-size:clamp(1.5rem,3.5vw,3.5rem);">Spiel beendet!</div>
-            <div class="beamer-waiting__sub">Alle ausgeschieden — knapp!</div>
-          </div>
-          <div class="beamer-footer" style="justify-content:flex-end;">
-            <div class="beamer-ladder beamer-ladder--full">${finishedLadderHtml}</div>
+          <div class="beamer-main beamer-main--ladder">
+            <div class="beamer-ladder beamer-ladder--gameover">${finishedLadderHtml}</div>
           </div>
         </div>
       `;

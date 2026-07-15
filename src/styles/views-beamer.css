@@ -274,3 +274,33 @@ body.beamer-mode {
 .beamer-vote-badge--wrong {
   background: var(--color-wrong);
 }
+
+.beamer-main--ladder {
+  align-items: center;
+  justify-content: center;
+  overflow-y: auto;
+}
+
+.beamer-ladder--gameover {
+  width: min(70vw, 900px);
+  gap: 4px;
+}
+
+.beamer-ladder--gameover .beamer-ladder-step {
+  padding: 0.7vh 2vw;
+  font-size: clamp(0.75rem, 1.3vw, 1.1rem);
+  justify-content: space-between;
+}
+
+.beamer-ladder-player {
+  display: flex;
+  align-items: center;
+  gap: 0.5vw;
+}
+
+.beamer-ladder-player-name {
+  font-size: clamp(0.6rem, 1vw, 0.85rem);
+  font-weight: 700;
+  color: var(--color-text);
+  white-space: nowrap;
+}
